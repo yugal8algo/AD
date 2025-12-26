@@ -11,12 +11,18 @@ class AdService {
    * @returns {Client}
    */
   createClient() {
-    return new Client({
+    const options = {
       url: this.config.url,
-      tlsOptions: {
+    };
+
+    // Only include tlsOptions if using LDAPS
+    if (this.config.url.startsWith('ldaps://')) {
+      options.tlsOptions = {
         rejectUnauthorized: this.config.rejectUnauthorized
-      }
-    });
+      };
+    }
+
+    return new Client(options);
   }
 
   /**
